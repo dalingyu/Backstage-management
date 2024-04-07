@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Last Project</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+
+<body>
+    <div class="admin-container" id="admin-app" v-cloak>
+        <div class="header">
+            <div>
+                <h1 class="admin-title">後臺管理系統</h1>
+            </div>
+            <div>
+                <ul class="header-fn">
+                    <li>
+                        <a href="#" class="to-frontend">回前台</a>
+                    </li>
+                    <li>
+                        <a href="#">管理者</a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn">登出</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main">
+            <div class="left-side">
+                <ul class="fn-menu">
+                    <template v-for="(item, item_id) in menu_items">
+                        <li>
+                            <a :href="`#${item_id}`" :class="{active: current_menu == item_id}"
+                                @click="setCurrentMenu(item_id)">
+                                <span :class="item.icon[0]">
+                                    {{ item.icon[1] }}
+                                </span>
+                                <span>
+                                    {{ item.name }}
+                                </span>
+                            </a>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+            <div class="right-side">
+                <h2 class="module-name">數據分析中心</h2>
+                <div class="diff-item">
+                    <div>
+                        <div class="diff-header">
+                            <div>營業額</div>
+                            <div class="diff-header-num">同月比<span>{{ diff_item.sale.month }}</span></div>
+                        </div>
+                        <div class="diff-day">
+                            <div>
+                                <div class="diff-day-name">今天</div>
+                                <div class="diff-day-num">${{ diff_item.sale.today }}</div>
+                            </div>
+                            <div>
+                                <div class="diff-day-name">本周</div>
+                                <div class="diff-day-num">${{ diff_item.sale.week }}</div>
+                            </div>
+                        </div>
+                        <div class="diff-progress">
+                            <div>100%</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="diff-header">
+                            <div>訂單數</div>
+                            <div class="diff-header-num">同月比<span>{{ diff_item.order.month }}</span></div>
+                        </div>
+                        <div class="diff-day">
+                            <div>
+                                <div class="diff-day-name">今天</div>
+                                <div class="diff-day-num">{{ diff_item.order.today }}</div>
+                            </div>
+                            <div>
+                                <div class="diff-day-name">本周</div>
+                                <div class="diff-day-num">{{ diff_item.order.week }}</div>
+                            </div>
+                        </div>
+                        <div class="diff-progress">
+                            <div>100%</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="diff-header">
+                            <div>會員數</div>
+                            <div class="diff-header-num">同月比<span>{{ diff_item.member.month }}</span></div>
+                        </div>
+                        <div class="diff-day">
+                            <div>
+                                <div class="diff-day-name">今天</div>
+                                <div class="diff-day-num">{{ diff_item.member.today }}</div>
+                            </div>
+                            <div>
+                                <div class="diff-day-name">本周</div>
+                                <div class="diff-day-num">{{ diff_item.member.week }}</div>
+                            </div>
+                        </div>
+                        <div class="diff-progress">
+                            <div>100%</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="diff-header">
+                            <div>瀏覽量</div>
+                            <div class="diff-header-num">同月比<span>{{ diff_item.visit.month }}</span></div>
+                        </div>
+                        <div class="diff-day">
+                            <div>
+                                <div class="diff-day-name">今天</div>
+                                <div class="diff-day-num">{{ diff_item.visit.today }}</div>
+                            </div>
+                            <div>
+                                <div class="diff-day-name">本周</div>
+                                <div class="diff-day-num">{{ diff_item.visit.week }}</div>
+                            </div>
+                        </div>
+                        <div class="diff-progress">
+                            <div>100%</div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="dashboard-title">處理事項</h3>
+                <div class="progress-item">
+                    <div>
+                        <div class="progress-item-num">{{ progress_item.question }}</div>
+                        <div>待處理詢問</div>
+                    </div>
+                    <div>
+                        <div class="progress-item-num">{{ progress_item.sms }}</div>
+                        <div>簡訊剩餘數</div>
+                    </div>
+                    <div>
+                        <div class="progress-item-num">{{ progress_item.item }}</div>
+                        <div>總物件數</div>
+                    </div>
+                    <div>
+                        <div class="progress-item-num">{{ progress_item.member }}</div>
+                        <div>總會員數</div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div>
+                        <h4 class="dashboard-title">統計年表</h4>
+                        <div>
+                            <canvas ref="history_chart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="dashboard-title">目前在線人數</h4>
+                        <div class="online-chart-wrap">
+                            <canvas ref="current_online"></canvas>
+                            <div class="online-chart-text">
+                                <div class="online-chart-num">{{ current_online }}</div>
+                                <div>使用者</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="dashboard-title">顧客分析</h3>
+                <div class="custom-item">
+                    <div>
+                        <h4 class="dashboard-title">會員身分</h4>
+                        <div class="custom-chart">
+                            <div>
+                                <div>
+                                    <canvas ref="custom_type"></canvas>
+                                </div>
+                            </div>
+                            <div>
+                                <ul class="custom-item-text">
+                                    <li>
+                                        <span class="custom-item-circle"></span>
+                                        <span>一般會員</span>
+                                        <span>100</span>
+                                        <span class="cutome-item-percentage">10%</span>
+                                    </li>
+                                    <li>
+                                        <span class="custom-item-circle"></span>
+                                        <span>業務專員</span>
+                                        <span>100</span>
+                                        <span class="cutome-item-percentage">10%</span>
+                                    </li>
+                                    <li>
+                                        <span class="custom-item-circle"></span>
+                                        <span>專業達人</span>
+                                        <span>100</span>
+                                        <span class="cutome-item-percentage">10%</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="dashboard-title">會員性別</h4>
+                        <div class="custom-chart">
+                            <div>
+                                <div>
+                                    <canvas ref="custom_gender"></canvas>
+                                </div>
+                            </div>
+                            <div>
+                                <ul class="custom-item-text">
+                                    <li>
+                                        <span class="custom-item-circle"></span>
+                                        <span>男性</span>
+                                        <span>100</span>
+                                        <span class="cutome-item-percentage">10%</span>
+                                    </li>
+                                    <li>
+                                        <span class="custom-item-circle"></span>
+                                        <span>女性</span>
+                                        <span>100</span>
+                                        <span class="cutome-item-percentage">10%</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="dashboard-title">會員年齡</h4>
+                        <div class="custom-chart">
+                            <div>
+                                <div>
+                                    <canvas ref="custom_age"></canvas>
+                                </div>
+                            </div>
+                            <div>
+                                <ul class="custom-item-text">
+                                    <li>
+                                        <span class="custom-item-circle"></span>
+                                        <span>25~35歲</span>
+                                        <span>100</span>
+                                        <span class="cutome-item-percentage">10%</span>
+                                    </li>
+                                    <li>
+                                        <span class="custom-item-circle"></span>
+                                        <span>36~45歲</span>
+                                        <span>100</span>
+                                        <span class="cutome-item-percentage">10%</span>
+                                    </li>
+                                    <li>
+                                        <span class="custom-item-circle"></span>
+                                        <span>46~55歲</span>
+                                        <span>100</span>
+                                        <span class="cutome-item-percentage">10%</span>
+                                    </li>
+                                    <li>
+                                        <span class="custom-item-circle"></span>
+                                        <span>56~65歲</span>
+                                        <span>100</span>
+                                        <span class="cutome-item-percentage">10%</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="dashboard-title">會員分級</h4>
+                        <div class="custom-chart">
+                            <div>
+                                <div>
+                                    <canvas ref="custom_role"></canvas>
+                                </div>
+                            </div>
+                            <div>
+                                <ul class="custom-item-text">
+                                    <li>
+                                        <span class="custom-item-circle"></span>
+                                        <span>標準會員</span>
+                                        <span>100</span>
+                                        <span class="cutome-item-percentage">10%</span>
+                                    </li>
+                                    <li>
+                                        <span class="custom-item-circle"></span>
+                                        <span>基本會員</span>
+                                        <span>100</span>
+                                        <span class="cutome-item-percentage">10%</span>
+                                    </li>
+                                    <li>
+                                        <span class="custom-item-circle"></span>
+                                        <span>高級會員</span>
+                                        <span>100</span>
+                                        <span class="cutome-item-percentage">10%</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hot-item">
+                    <div>
+                        <h4 class="hot-item-title">熱門物件</h4>
+                        <div class="admin-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>排名</th>
+                                        <th>地址</th>
+                                        <th>類型</th>
+                                        <th>底價</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-for="(item, item_index) in hot_item">
+                                        <tr>
+                                            <td>{{ item_index + 1 }}</td>
+                                            <td>{{ item.address }}</td>
+                                            <td>{{ item.type }}</td>
+                                            <td class="text-end">{{ item.price }}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="hot-item-title">熱門文章</h4>
+                        <div class="admin-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>排名</th>
+                                        <th>標題</th>
+                                        <th>瀏覽量</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-for="(item, item_index) in hot_article">
+                                        <tr>
+                                            <td>{{ item_index + 1 }}</td>
+                                            <td>{{ item.title }}</td>
+                                            <td class="text-end">{{ item.visit }}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="assets/js/chart.js"></script>
+<script src="assets/js/vue3.js"></script>
+<script type="module" src="assets/js/main.js"></script>
+
+</html>

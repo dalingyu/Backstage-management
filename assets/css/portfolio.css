@@ -1,0 +1,24 @@
+a {
+    color: blue;
+}
+
+body {
+    scroll-behavior: smooth;
+    font-size: 30px;
+    font-family: "Permanent Marker", cursive;
+}
+
+.container {
+    max-width: 1000px;
+    height: 100%;
+    position: relative;
+    margin: auto;
+    padding: 0 15px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+
+
